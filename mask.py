@@ -56,6 +56,7 @@ class PilatusMask:
             self.mask[y-2:y+1,:] = +1
 
     def mask_edges(self):
+        """adds edges to mask"""
         max_x, max_y = self.x_size - 1, self.y_size - 1
 
         self.mask[0:max_x,0] = 1
