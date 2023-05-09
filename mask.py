@@ -1,12 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import toml
 
 class PilatusMask:
-    def __init__(self):
+    def __init__(self, e):
         self.x_size, self.y_size = 1679, 1475
         self.pixel_size = 1.72e-4
-        self.e = 1
+        self.e = e
         self.x_len = self.x_size * self.pixel_size
         self.y_len = self.y_size * self.pixel_size
         self.regions = np.array([[488, 494, None, None],
@@ -41,13 +40,13 @@ class PilatusMask:
         ax.imshow(self.mask, cmap='binary', origin='lower', extent=[0, self.x_size, 0, self.y_size], aspect='equal')
         ax.set(xlabel='$x$ Pixel / -', ylabel='$y$ Pixel / -')
 
-        if self.p1:
-            ax.axvline(self.p1/self.x_len * self.x_size, color='r', linestyle='--')
-            ax.axhline(self.p2/self.y_len * self.y_size, color='r', linestyle='--')
+        # if self.p1:
+        #     ax.axvline(self.p1/self.x_len * self.x_size, color='r', linestyle='--')
+        #     ax.axhline(self.p2/self.y_len * self.y_size, color='r', linestyle='--')
 
             # plot from p1 p2 to corner
-            print(self.corner)
-            ax.plot([self.p1/self.x_len * self.x_size, self.corner[0]], [self.p2/self.y_len * self.y_size, self.corner[1]], color='r', linestyle='--')
+         #   print(self.corner)
+          #  ax.plot([self.p1/self.x_len * self.x_size, self.corner[0]], [self.p2/self.y_len * self.y_size, self.corner[1]], color='r', linestyle='--')
         plt.show()
     
     def sub_grid_masking(self):
@@ -55,6 +54,14 @@ class PilatusMask:
             self.mask[:,x-2:x+1] = +1
         for y in self.y_submodules:
             self.mask[y-2:y+1,:] = +1
+
+    def mask_edges(self):
+        max_x, max_y = self.x_size - 1, self.y_size - 1
+
+        self.mask[0:max_x,0] = 1
+        self.mask[0,0:max_y+1] = 1
+        self.mask[0:max_x+1,max_y] = 1
+        self.mask[max_x,0:max_y+1] = 1
 
     def combine_mask(self, path_to_mask):
         mask = np.load(path_to_mask)
@@ -84,11 +91,13 @@ class PilatusMask:
 
 
 def main():
-    mask = PilatusMask()
+    mask = PilatusMask(2)
     mask.sub_grid_masking()
-    mask.combine_mask('/home/ben/DESY_PDF/0_data/maskMZ.npy')
+    mask.mask_edges()
+    #mask.combine_mask('/home/ben/DESY_PDF/0_data/maskMZ.npy')
     # mask.combine_mask('/home/ben/DESY_PDF/0_data/config/mask.npy')
     mask.plot_mask()
+    plt.show()
     mask.save_mask('combined_subsub_grid_mask.npy')
 
         
