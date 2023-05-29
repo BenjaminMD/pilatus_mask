@@ -30,8 +30,3 @@ class Mask(Pilatus):
         plt.show()
 
 
-mask = Mask()
-mask.mask_outer_edges()
-mask.mask_gaps(1)
-mask.mask_modules(1)
-mask.plot_mask()
