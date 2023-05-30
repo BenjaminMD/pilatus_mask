@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import matplotlib.pyplot as plt
 from pilatus import Pilatus, Gaps, SubModules
+from ezplot import create_basic_plot
 import numpy as np
 
 
@@ -26,7 +27,9 @@ class Mask(Pilatus):
         self.pixel_matrix = np.logical_or(self.pixel_matrix, data).astype(int)
 
     def plot_mask(self):
-        plt.imshow(self.pixel_matrix)
-        plt.show()
+        fig, ax = create_basic_plot('X_Pixel', 'Y_Pixel', 'Mask', T=True)
+        ax.imshow(self.pixel_matrix, origin='lower')
+        return fig, ax
+
 
 
