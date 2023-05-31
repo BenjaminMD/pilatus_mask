@@ -1,11 +1,11 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 from dataclasses import dataclass
 from typing import Tuple
 import numpy as np
 
 
 @dataclass
-class Pilatus:
+class Dimensions:
     x_pixels: int = 1475
     y_pixels: int = 1679
     pixel_size: float = 1.72e-4
@@ -39,3 +39,9 @@ class SubModules:
         [[Y_OFFSET], np.array(Gaps.y_strips)[:, 0] + Y_OFFSET]
 
     )
+
+
+class Pilatus():
+    Dimensions = Dimensions
+    Gaps = Gaps
+    Submodules = SubModules
